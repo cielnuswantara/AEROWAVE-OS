@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroWave - Frutiger Aero Music & Soul</title>
+    <style>
+        /* CSS Frutiger Aero Theme */
+        :root {
+            --sky-blue: #00d2ff;
+            --deep-blue: #3a7bd5;
+            --aqua-glow: #76ff03;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-color: #1a355e;
+            --accent-pink: #ff758c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 50%, #764ba2 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Floating Bubbles Effect */
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.5), 0 0 15px rgba(0,210,255,0.3);
+            animation: floatUp 10s infinite linear;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Glassmorphism Container */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            width: 90%;
+            max-width: 950px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Login Screen Overlay */
+        #login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 198, 255, 0.9), rgba(118, 75, 162, 0.9));
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 350px;
+        }
+
+        .login-box h1 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .login-box p {
+            color: #e0f7fa;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+            color: #1a355e;
+            font-size: 1rem;
+            outline: none;
+            text-align: center;
+        }
+
+        .login-box input::placeholder {
+            color: #3a7bd5;
+        }
+
+        .glossy-btn {
+            background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .glossy-btn:hover {
+            background: linear-gradient(to bottom, #3a7bd5, #00d2ff);
+            transform: translateY(-2px);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        /* App Layout */
+        .app-header {
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-greeting {
+            color: #fff;
+            font-weight: 500;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .app-body {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar Nav */
+        .sidebar {
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item {
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.5);
+        }
+
+        /* Main Content Area */
+        .content-area {
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Section Cards */
+        .card-glass {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Mood Selector */
+        .mood-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+        }
+
+        .mood-btn {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 15px;
+            border-radius: 14px;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .mood-btn:hover, .mood-btn.selected {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.03);
+            border-color: #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Music Player */
+        .player-hero {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .album-art {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .album-art::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .player-info h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .player-info p {
+            color: #e0f7fa;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.6);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .control-btn.play-pause {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to bottom, #00d2ff, #3a7bd5);
+            font-size: 1.2rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.6);
+            transform: scale(1.05);
+        }
+
+        .track-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .track-item {
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .track-item:hover, .track-item.active {
+            background: rgba(255,255,255,0.35);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        /* Tarot Cards Section */
+        .tarot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tarot-card {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            height: 220px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tarot-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+        }
+
+        .tarot-card .card-back {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tarot-card h3 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tarot-card p {
+            color: #e0f7fa;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .tarot-card.revealed {
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+            border-color: #fff;
+        }
+
+        /* Daily Journal & Encouragement */
+        .journal-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .journal-box textarea {
+            width: 100%;
+            height: 110px;
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.2);
+            color: #1a355e;
+            font-size: 0.95rem;
+            outline: none;
+            resize: none;
+        }
+
+        .journal-box textarea::placeholder {
+            color: #3a7bd5;
+        }
+
+        .quote-box {
+            background: rgba(255, 255, 255, 0.25);
+            border-left: 4px solid #00d2ff;
+            padding: 15px 20px;
+            border-radius: 0 14px 14px 0;
+            font-style: italic;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.4);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Background Bubbles -->
+    <div class="bubble" style="left: 10%; width: 40px; height: 40px; animation-duration: 8s; animation-delay: 0s;"></div>
+    <div class="bubble" style="left: 30%; width: 70px; height: 70px; animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="bubble" style="left: 55%; width: 30px; height: 30px; animation-duration: 7s; animation-delay: 1s;"></div>
+    <div class="bubble" style="left: 75%; width: 90px; height: 90px; animation-duration: 15s; animation-delay: 4s;"></div>
+    <div class="bubble" style="left: 90%; width: 50px; height: 50px; animation-duration: 9s; animation-delay: 3s;"></div>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h1>AeroWave 🌊</h1>
+            <p>Masuk untuk memulai perjalanan musik dan penemuan jati dirimu.</p>
+            <input type="text" id="username-input" placeholder="Masukkan nama panggilanmu...">
+            <button class="glossy-btn" onclick="handleLogin()">Masuk ke AeroWave</button>
+        </div>
+    </div>
+
+    <!-- Main Glass Panel Application -->
+    <div class="glass-panel">
+        <header class="app-header">
+            <div class="logo">
+                <span>🌊</span> AeroWave Music & Soul
+            </div>
+            <div class="user-greeting" id="display-user">Halo, Teman Remaja</div>
+        </header>
+
+        <div class="app-body">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <div class="nav-item active" onclick="switchTab('player', this)">🎵 Pemutar Musik</div>
+                <div class="nav-item" onclick="switchTab('mood', this)">✨ Penyesuaian Mood</div>
+                <div class="nav-item" onclick="switchTab('tarot', this)">🔮 Kartu Tarot Remaja</div>
+                <div class="nav-item" onclick="switchTab('journal', this)">📝 Catatan & Penyemangat</div>
+            </nav>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                
+                <!-- Tab 1: Pemutar Musik -->
+                <div id="tab-player" class="tab-content active">
+                    <div class="card-glass player-hero">
+                        <div class="album-art" id="current-art">🎧</div>
+                        <div class="player-info" style="flex: 1;">
+                            <h2 id="current-title">Pilih Lagu atau Mood</h2>
+                            <p id="current-artist">AeroWave Ambient Sound</p>
+                            <div class="player-controls">
+                                <button class="control-btn" onclick="prevTrack()">⏮</button>
+                                <button class="control-btn play-pause" id="play-btn" onclick="togglePlay()">▶</button>
+                                <button class="control-btn" onclick="nextTrack()">⏭</button>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-left: auto; color: #fff; font-size: 0.9rem;">
+                                    <span>🔊</span>
+                                    <input type="range" min="0" max="1" step="0.05" value="0.5" onchange="changeVolume(this.value)" style="accent-color: #00d2ff; width: 80px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <h3 style="color: #fff; margin-bottom: 12px; font-size: 1.1rem;">Daftar Putar Rekomendasi</h3>
+                        <div class="track-list" id="playlist-container">
+                            <!-- Diisi via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Penyesuaian Mood -->
+                <div id="tab-mood" class="tab-content">
+                    <div class="card-glass">
+                        <h2 style="color: #fff; margin-bottom: 10px; font-size: 1.3rem;">Bagaimana Perasaanmu Hari Ini?</h2>
+                        <p style="color: #e0f7fa; margin-bottom: 20px; font-size: 0.95rem;">Pilih suasana hati untuk menyesuaikan alunan musik dan nuansa warnamu.</p>
+                        <div class="mood-container">
+                            <div class="mood-btn" onclick="selectMood('chill', '🌊 Chill & Tenang')">
+                                <div style="font-size: 1.8rem; margin-bottom: 5px;">🌊</div>
+                                Chill & Tenang
+                            </div>
+                            <div class="mood-btn" onclick="selectMood('energetic', '⚡ Semangat Baru')">
+                                <div style="font-size: 1.8rem; margin-bottom: 5px;">⚡</div>
+                                Semangat Baru
+                            </div>
+                            <div class="mood-btn" onclick="selectMood('melancholy', '🌧️ Melankolis & Galau')">
+                                <div style="font-size: 1.8rem; margin-bottom: 5px;">🌧️</div>
+                                Melankolis & Galau
+                            </div>
+                            <div class="mood-btn" onclick="selectMood('confident', '✨ Mencari Jati Diri')">
+                                <div style="font-size: 1.8rem; margin-bottom: 5px;">✨</div>
+                                Mencari Jati Diri
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Kartu Tarot Remaja -->
+                <div id="tab-tarot" class="tab-content">
+                    <div class="card-glass">
+                        <h2 style="color: #fff; margin-bottom: 10px; font-size: 1.3rem;">🔮 Refleksi Kartu Tarot Remaja</h2>
+                        <p style="color: #e0f7fa; margin-bottom: 20px; font-size: 0.95rem;">Pilih satu kartu untuk mendapatkan pesan bijak tentang pencarian jati dirimu.</p>
+                        <div class="tarot-grid" id="tarot-container">
+                            <div class="tarot-card" onclick="revealTarot(0)">
+                                <div class="card-back">🎴</div>
+                                <h3>Kartu Pertama</h3>
+                                <p>Klik untuk membuka pesan tersembunyi</p>
+                            </div>
+                            <div class="tarot-card" onclick="revealTarot(1)">
+                                <div class="card-back">🎴</div>
+                                <h3>Kartu Kedua</h3>
+                                <p>Klik untuk membuka pesan tersembunyi</p>
+                            </div>
+                            <div class="tarot-card" onclick="revealTarot(2)">
+                                <div class="card-back">🎴</div>
+                                <h3>Kartu Ketiga</h3>
+                                <p>Klik untuk membuka pesan tersembunyi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Catatan & Penyemangat -->
+                <div id="tab-journal" class="tab-content">
+                    <div class="card-glass">
+                        <h2 style="color: #fff; margin-bottom: 10px; font-size: 1.3rem;">✨ Catatan Hari Ini</h2>
+                        <p style="color: #e0f7fa; margin-bottom: 15px; font-size: 0.95rem;">Tuliskan apa yang kamu rasakan, impian kecil, atau hal yang ingin kamu capai hari ini.</p>
+                        <div class="journal-box">
+                            <textarea id="journal-input" placeholder="Tulis catatanmu di sini... (tersimpan otomatis)"></textarea>
+                            <button class="glossy-btn" onclick="saveJournal()">Simpan Catatan</button>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <h3 style="color: #fff; margin-bottom: 10px; font-size: 1.1rem;">💡 Penyemangat Hari Ini</h3>
+                        <div class="quote-box" id="daily-quote">
+                            "Kamu tidak perlu langsung sempurna. Setiap langkah kecil yang kamu ambil hari ini adalah bagian indah dari proses mengenali siapa dirimu sebenarnya."
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript Aplikasi -->
+    <script>
+        // Logika Login
+        function handleLogin() {
+            const usernameInput = document.getElementById('username-input').value.trim();
+            if(usernameInput) {
+                document.getElementById('display-user').innerText = `Halo, ${usernameInput}`;
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                }, 500);
+            } else {
+                alert('Tuliskan nama panggilanmu terlebih dahulu ya!');
+            }
+        }
+
+        // Navigasi Tab
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Web Audio API Synthesizer (Ambient Music Player Nyata tanpa file eksternal)
+        let audioCtx = null;
+        let isPlaying = false;
+        let currentTrackIndex = 0;
+        let masterGain = null;
+        let ambientInterval = null;
+
+        const playlist = [
+            { title: "Frutiger Dreamscape", artist: "AeroWave Ambient", freq: 329.63 }, // E4
+            { title: "Aqua Marine Breeze", artist: "Liquid Sky", freq: 392.00 }, // G4
+            { title: "Glass Horizon", artist: "Y2K Retro Future", freq: 440.00 }, // A4
+            { title: "Cloud Nine Echoes", artist: "AeroWave Soul", freq: 523.25 }  // C5
+        ];
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = 0.3;
+                masterGain.connect(audioCtx.destination);
+            }
+        }
+
+        function playTone(freq) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 3.5);
+
+            osc.connect(gainNode);
+            gainNode.connect(masterGain);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 3.5);
+        }
+
+        function renderPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            playlist.forEach((track, index) => {
+                container.innerHTML += `
+                    <div class="track-item ${index === currentTrackIndex ? 'active' : ''}" onclick="selectTrack(${index})">
+                        <span>🎵 ${track.title} - <small>${track.artist}</small></span>
+                        <span>▶</span>
+                    </div>
+                `;
+            });
+        }
+
+        function updatePlayerInfo() {
+            document.getElementById('current-title').innerText = playlist[currentTrackIndex].title;
+            document.getElementById('current-artist').innerText = playlist[currentTrackIndex].artist;
+            renderPlaylist();
+        }
+
+        function togglePlay() {
+            initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isPlaying = !isPlaying;
+            const playBtn = document.getElementById('play-btn');
+
+            if (isPlaying) {
+                playBtn.innerText = '⏸';
+                playTone(playlist[currentTrackIndex].freq);
+                ambientInterval = setInterval(() => {
+                    playTone(playlist[currentTrackIndex].freq * (Math.random() > 0.5 ? 1.25 : 1));
+                }, 3500);
+            } else {
+                playBtn.innerText = '▶';
+                clearInterval(ambientInterval);
+            }
+        }
+
+        function selectTrack(index) {
+            currentTrackIndex = index;
+            updatePlayerInfo();
+            if (!isPlaying) {
+                togglePlay();
+            } else {
+                clearInterval(ambientInterval);
+                ambientInterval = setInterval(() => {
+                    playTone(playlist[currentTrackIndex].freq);
+                }, 3500);
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            updatePlayerInfo();
+            if(isPlaying) {
+                clearInterval(ambientInterval);
+                ambientInterval = setInterval(() => { playTone(playlist[currentTrackIndex].freq); }, 3500);
+            }
+        }
+
+        function prevTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            updatePlayerInfo();
+            if(isPlaying) {
+                clearInterval(ambientInterval);
+                ambientInterval = setInterval(() => { playTone(playlist[currentTrackIndex].freq); }, 3500);
+            }
+        }
+
+        function changeVolume(val) {
+            if (masterGain) {
+                masterGain.gain.value = val;
+            }
+        }
+
+        // Penyesuaian Mood
+        function selectMood(mood, moodName) {
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            const body = document.body;
+            if(mood === 'chill') {
+                body.style.background = 'linear-gradient(135deg, #00c6ff 0%, #0072ff 50%, #764ba2 100%)';
+            } else if(mood === 'energetic') {
+                body.style.background = 'linear-gradient(135deg, #f2709c 0%, #ff9472 50%, #68eacc 100%)';
+            } else if(mood === 'melancholy') {
+                body.style.background = 'linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%)';
+            } else if(mood === 'confident') {
+                body.style.background = 'linear-gradient(135deg, #0ba360 0%, #3cba92 50%, #30cfd0 100%)';
+            }
+            alert(`Mood berhasil diubah ke: ${moodName}! Musik dan warna disesuaikan.`);
+        }
+
+        // Kartu Tarot Remaja
+        const tarotMessages = [
+            { title: "✨ The Star (Bintang Harapan)", desc: "Kamu sedang berada dalam fase menemukan impian besar. Percayalah pada cahaya batinmu dan jangan takut berbeda dari orang lain." },
+            { title: "🌱 The Page of Cups (Eksplorasi Hati)", desc: "Masa remaja adalah waktu untuk bereksperimen dengan minat baru. Bukalah hatimu untuk hobi dan pertemanan yang positif." },
+            { title: "🚀 The Chariot (Kendali Penuh)", desc: "Kamu memiliki kekuatan untuk menentukan arah hidupmu sendiri. Fokus pada tujuanmu dan hadapi tantangan dengan percaya diri." }
+        ];
+
+        function revealTarot(index) {
+            const cards = document.querySelectorAll('.tarot-card');
+            const card = cards[index];
+            const msg = tarotMessages[index];
+
+            card.classList.add('revealed');
+            card.innerHTML = `
+                <h3 style="color: #fff; margin-bottom: 8px; font-size: 1rem;">${msg.title}</h3>
+                <p style="color: #e0f7fa; font-size: 0.8rem; line-height: 1.4;">${msg.desc}</p>
+            `;
+        }
+
+        // Catatan Harian
+        function saveJournal() {
+            const text = document.getElementById('journal-input').value;
+            if(text.trim() !== '') {
+                localStorage.setItem('aerowave_journal', text);
+                alert('Catatan penyemangat hari ini berhasil disimpan!');
+            } else {
+                alert('Tuliskan sesuatu terlebih dahulu di catatanmu.');
+            }
+        }
+
+        window.onload = function() {
+            renderPlaylist();
+            const savedJournal = localStorage.getItem('aerowave_journal');
+            if(savedJournal) {
+                document.getElementById('journal-input').value = savedJournal;
+            }
+        };
+    </script>
+</body>
+</html>
